@@ -178,7 +178,8 @@ export default {
             anchor_tag.click();
         },
         gift_dorks: function() {
-            this.navigate_stripe_checkout();
+            // this.navigate_stripe_checkout();
+          this.$router.push('/purchase/result/gift')
         },
         valid_email: function(email) {
             let email_re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -200,41 +201,7 @@ export default {
         },
 
         purchase_dorks: function() {
-            if (this.myself_form_disabled) {
-                console.log("form disabled")
-            } else {
-                console.log("this runnin")
-                let myself_form_data = {
-                    first_name: this.first_name.trim(),
-                    last_name: this.last_name.trim(),
-                    email: this.email.trim(),
-                    last_action: actions_enum.ACTION_PURCHASE,
-                    tos: this.myself_checkbox,
-                };
-
-                let [valid, error_message] = this.validate_myself_form(myself_form_data);
-
-                if (valid) {
-                    this.purchase_loading = true
-                    data_api.store_myself_form(myself_form_data).then(resp => {
-                        resp.json().then(data => {
-                            console.log(data);
-                            if (data.success) {
-                                this.$store.commit('purchase_form', myself_form_data);
-                                this.$router.push('/checkout/stripe');
-                            } else {
-                                if (data.hasOwnProperty("error") && data.error === "purchased") {
-                                    alert("An active account is associated with this email");
-                                }
-                            }
-                        });
-                    }).finally(() => {
-                        this.purchase_loading = false;
-                    })
-                } else {
-                    alert(error_message);
-                }
-            }
+            this.$router.push('/purchase/result/myself')
         },
         set_dims: function() {
             this.current_width = window.innerWidth;
